@@ -1,0 +1,108 @@
+---
+title: "Papaja Tutorial"
+author: "Iris Zhong"
+date: '2022-04-20'
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    toc_collapsed: true
+    toc_depth: 3
+    number_sections: true
+    theme: lumen
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This is a tutorial for writing reports with the R package `papaja`.
+
+![](images/paste-E2FDEDC3.png){width="100"}
+
+But why write in R in the first place? Why use `papaja`?
+
+Advantages:
+
+-   Formatting looks beautiful without much effort needed.
+
+-   Conform to APA style (6th version). `papaja` is short for Preparing APA Journal Articles.
+
+-   No need to go back and forth between R and Word to update figures and results.
+
+-   Results are more reproducible with all data and analysis codes available in the document.
+
+Disadvantages:
+
+-   Learning curve is steeper at the start.
+
+-   Need latex knowledge if you want to achieve something more complicated.
+
+-   No grammar checker (Grammarly I'm looking at you), spelling corrector is not great.
+
+-   With Github, collaboration and change tracking are possible. But, I haven't found a nice way to share and receive feedback.
+
+Hope this gives you some motivation to learn `papaja`! Below are the learning objectives for this tutorial:
+
+1\. Install the package, and apply the template.
+
+2\. Know what YAML is, and apply basic changes.
+
+3\. Create in-text citations and bibliography with the help of Zotero/.bib file.
+
+4\. Understand how to reference variable values in text, insert pictures, and prepare APA-style figures.
+
+```{r}
+x <- "`r x`"
+```
+
+Write `` `r x` `` to print the value of x without actually writing down the number.
+
+# Before start
+
+To follow this tutorial, you'll need:
+
+-   R and R Studio, for sure. I recommend updating R Studio to a version greater than v1.4, as the visual markdown editor is very useful.
+
+-   R Markdown
+
+-   Some basic knowledge of the R Studio interface
+
+# Set-up
+
+Let's start by creating a new project and installing the required packages.
+
+## Create project
+
+Create a new project: File --\> New Project --\> New Directory --\> New Project.
+
+Let's name this project \`papaja_tutorial\`, and put it in a place you know of.
+
+![](images/Screen%20Shot%202022-04-20%20at%202.44.05%20AM.png){width="314"}
+
+## Install tinytex
+
+To knit markdown files into PDFs, you'll need the `tinytex` package. Install `tinytex` by running the following line in the R console:
+
+```{r eval=FALSE}
+if(!requireNamespace("tinytex", quietly = TRUE)) install.packages("tinytex")
+```
+
+Troubleshooting: if you see the error message "/usr/local/bin not writable" like I did, run these lines **in the terminal**, **not in R console** ([reference](https://github.com/yihui/tinytex/issues/24)):
+
+```{r eval = FALSE}
+[ -e /usr/local/bin ] || sudo mkdir -p /usr/local/bin
+sudo chown -R `whoami`:admin /usr/local/bin
+~/Library/TinyTeX/bin/*/tlmgr path add
+```
+
+Alternatively, you may also consider MikTeX for Windows, MacTeX for Mac, or TeX Live for Linux. See the [papaja manual](http://frederikaust.com/papaja_man/introduction.html#getting-started) for details.
+
+## Install papaja
+
+Run these lines to install `papaja`:
+
+```{r eval = FALSE}
+if(!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+remotes::install_github("crsh/papaja")
+```
