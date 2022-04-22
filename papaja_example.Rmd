@@ -1,0 +1,130 @@
+---
+title             : "Creating APA-style papers with the R package papaja"
+shorttitle        : "Writing with papaja"
+
+author: 
+  - name          : "Iris Zhong"
+    affiliation   : "1"
+    corresponding : no    # Define only one corresponding author
+
+affiliation:
+  - id            : "1"
+    institution   : "Stanford University"
+
+
+abstract: |
+  One or two sentences providing a **basic introduction** to the field,  comprehensible to a scientist in any discipline.
+  
+  Two to three sentences of **more detailed background**, comprehensible  to scientists in related disciplines.
+  
+  One sentence clearly stating the **general problem** being addressed by  this particular study.
+  
+  One sentence summarizing the main result (with the words "**here we show**" or their equivalent).
+  
+  Two or three sentences explaining what the **main result** reveals in direct comparison to what was thought to be the case previously, or how the  main result adds to previous knowledge.
+  
+  One or two sentences to put the results into a more **general context**.
+  
+  Two or three sentences to provide a **broader perspective**, readily comprehensible to a scientist in any discipline.
+  
+  <!-- https://tinyurl.com/ybremelq -->
+  
+keywords          : "keywords"
+wordcount         : "X"
+
+bibliography      : ["r-references.bib", "references.bib", "manual-reference.bib"]
+
+floatsintext      : no
+linenumbers       : no
+draft             : no
+mask              : no
+
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+
+classoption       : "man"
+output            : papaja::apa6_doc
+---
+
+```{r setup, include = FALSE}
+library("papaja")
+library("tidyverse")
+r_refs("r-references.bib")
+```
+
+```{r analysis-preferences}
+# Seed for random number generation
+set.seed(42)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+```
+
+# Introduction
+
+Some introduction
+
+# Background
+
+Here's a citation from the manual bibliography: @isnandar2022effect
+
+# Methods
+
+We report how we determined our sample size, all data exclusions (if any), all manipulations, and all measures in the study. <!-- 21-word solution (Simmons, Nelson & Simonsohn, 2012; retrieved from http://ssrn.com/abstract=2160588) -->
+
+## Participants
+
+xxx
+
+## Material
+
+xxx
+
+### Data A
+
+xxx
+
+Here's one citation from zotero: @2010cen
+
+
+### Data B
+
+xxx
+
+## Procedure
+
+xxxx
+
+## Data analysis
+
+We used `r cite_r("r-references.bib")` for all our analyses.
+
+# Results
+
+```{r}
+x <- c(1, 4, 6, 7, 10) + 1
+```
+
+The mean of x is `r mean(x)`.
+
+```{r}
+y <- c(5, 8, 6, 10, 15)
+```
+
+```{r}
+mod <- lm(y ~ x)
+coef_mod <- coefficients(mod) # extract coefficients
+coef_mod
+```
+
+The predicted model is $y = `r coef_mod[1]`+`r coef_mod[2]` x$
+
+# Discussion
+
+xxxx
+
+\newpage
+
+# References
+
+::: {#refs custom-style="Bibliography"}
+:::

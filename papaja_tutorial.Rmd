@@ -50,13 +50,7 @@ Hope this gives you some motivation to learn `papaja`! Below are the learning ob
 
 3\. Create in-text citations and bibliography with the help of Zotero/.bib file.
 
-4\. Understand how to reference variable values in text, insert pictures, and prepare APA-style figures.
-
-```{r}
-x <- "`r x`"
-```
-
-Write `` `r x` `` to print the value of x without actually writing down the number.
+4\. Understand how to print variable values in text.
 
 # Before start
 
@@ -65,6 +59,8 @@ To follow this tutorial, you'll need:
 -   R and R Studio, for sure. I recommend updating R Studio to a version greater than v1.4, as the visual markdown editor is very useful.
 
 -   R Markdown
+
+-   Zotero (optional)
 
 -   Some basic knowledge of the R Studio interface
 
@@ -76,7 +72,7 @@ Let's start by creating a new project and installing the required packages.
 
 Create a new project: File --\> New Project --\> New Directory --\> New Project.
 
-Let's name this project \`papaja_tutorial\`, and put it in a place you know of.
+Let's name this project `papaja_tutorial`, and put it in a place you know of.
 
 ![](images/Screen%20Shot%202022-04-20%20at%202.44.05%20AM.png){width="314"}
 
@@ -100,9 +96,273 @@ Alternatively, you may also consider MikTeX for Windows, MacTeX for Mac, or TeX 
 
 ## Install papaja
 
-Run these lines to install `papaja`:
+Run these lines in the console to install `papaja`:
 
 ```{r eval = FALSE}
 if(!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
 remotes::install_github("crsh/papaja")
 ```
+
+## Install tidyverse
+
+We'll do some simple analyses and plotting for demonstration purposes. If you don't have the package `tidyverse` yet, run this line of code in the console:
+
+```{r eval = FALSE}
+install.packages("tidyverse")
+```
+
+# Use papaya
+
+Now, let's explore the APA-style template that `papaja` has offered!
+
+## Apply the template
+
+Create a new markdown using the template: File --\> R Markdown --\> From Template --\> scroll down to find "APA-style manuscript" --\> click "OK"
+
+![](images/Screen%20Shot%202022-04-20%20at%204.34.42%20AM.png){width="434"}
+
+Let's take a look at the markdown we've just created. If you are using the new version of R Studio with a visual markdown editor, switch to the source editor at this point.
+
+![](images/Screen%20Shot%202022-04-20%20at%205.18.24%20AM.png)
+
+At the top of the markdown, from Line 1 to 65, we can see the general information about this paper and some formatting parameters. This section is called **YAML header** and it controls the style of the paper. YAML header is always enclosed in triple dashes "---" on either side.
+
+We'll come back to YAML later! But now let's move on to the next chunk.
+
+```{r eval = F}
+library("papaja")
+r_refs("r-references.bib")
+```
+
+The above chunk loads the package `papaja`, and generates a reference file called r-references.bib for R and all R packages used in this paper. Let's add the package `tidyverse` here too, so the chunk now looks like this:
+
+```{r eval = F}
+library("papaja")
+library("tidyverse")
+r_refs("r-references.bib")
+```
+
+Then, the document is separated into 3 sections: Methods, Results and Discussion. The \# symbol represents that the text in that line is a heading. One \# is first-level heading, two #s is second-level heading, etc. The lowest, therefore the smallest heading, has five #s.
+
+So, in this template, participants, material, procedure, and data analysis are all subheadings under Methods.
+
+It seems like the template is missing Introduction and Background. Let's add them to the document.
+
+Let's also add two subheadings, Data A and Data B under Material. Now, it will look like this:
+
+![](images/Screen%20Shot%202022-04-20%20at%205.56.10%20AM.png){width="650"}
+
+Notice that there is one sentence under the data analysis section. It will automatically generate in-text citations for R and all R packages we've used in the document.
+
+The final section is references, starting on a new page. There are some weird-looking codes below, and don't worry about them. You won't write anything here, because as we'll later see, `papaja` helps us auto-generate references.
+
+## Knit to PDF
+
+Let's knit the file and see what it looks like!
+
+Go to Knit -\> Knit to apa6_pdf. Then it will prompt you to save this markdown before knitting. Name this file `papaja_testing`. It should automatically place the document inside the directory for this project. If not, you can manually find the directory and save this document there.
+
+![](images/Screen%20Shot%202022-04-20%20at%205.31.18%20AM.png)
+
+After a while, a PDF reader window should pop up and show the output.
+
+It does look like a paper! The first page is the title page, showing title, authors, affiliations, note, and running head. The next page dedicates to the abstract.
+
+The body starts from the third page. Notice how the first-level headings (e.g. Methods) look different from the second-level headings (e.g. Participants) and third-level headings (e.g. Data A). The data analysis section lists a lot of R packages, because `tidyverse` is a collection of libraries.
+
+Lastly, the References section auto-generates all the references used in the paper.
+
+Also, your working directory should now have a new file: r-references.bib. Click on it to open it in R Studio. It consists of citation information for R and all packages used.
+
+![](images/Screen%20Shot%202022-04-20%20at%205.46.16%20AM.png){width="361"}
+
+Let's change a few things to make it look even better:
+
+1.  Fill in the title and short title
+2.  Replace the authors, and change the affiliations
+3.  Remove author notes
+4.  Remove line numbers
+5.  Knit the file to word document instead of PDF.
+
+## Modify the YAML header
+
+All of the above tasks happen in the YAML header, so let's go back to Line 1.
+
+1.  Fill in the titles
+
+Change the titles by replacing the text within the quotation marks. Let's put `Creating APA-style papers with the R package papaja` as the title, and `Writing with papaja` as the short title.
+
+2.  Replace the author information
+
+Similarly, replace "First author" with your name. You can remove address, email and role. Change `corresponding` to no. Remove the information of the second author. Change the institution to `Stanford University`, and remove the second id and institution.
+
+3.  Remove author notes
+
+Delete the whole author note section.
+
+4.  Remove line numbers
+
+Scroll down until you see a list of parameters with yeses and nos. Now, only the `linenumbers` parameter is turned on. Turn it off by changing `yes` to `no`.
+
+5.  Knit to word doc
+
+At the bottom of the YAML header, you should see `output: papaja::apa6_pdf`. To create a word document output, change it to `output: papaja::apa6_docx`.
+
+# Create more content
+
+Let's create some more content in the body! We'll learn how to create references and print variable values. 
+
+## References
+
+At this point, we only have references for the R packages. Now, let's add citations and references for the literature.
+
+### With visual markdown editor
+
+If your R Studio is updated and you have a zotero, references couldn't be easier! Here are the steps.
+
+1.  Go to the visual markdown editor.
+2.  Go to Insert --\> Citation.
+3.  If you have a local Zotero account, you'll see all of the records in your Zotero library. Select one reference.
+
+![](images/Screen%20Shot%202022-04-22%20at%207.53.11%20AM.png)
+
+4.  Then, you'll see an \@ sign and the short name of the reference. You've successfully inserted an in-text citation!
+5.  Go to the YAML header. You'll see at the bottom of the header, there's `bibliography: references.bib`. However, if you look a few lines above, there's already another bibliography: `bibliography: "r-references.bib"` . Markdown will get confused if there are two same parameters specifying different things.
+6.  To correct this, remove one of the bibliography lines, and change the remaining one into `bibliography: ["references.bib", "r-references.bib"]` .![](images/Screen%20Shot%202022-04-22%20at%207.54.36%20AM.png)
+7.  You are all set! Knit the file and see how it looks.
+
+Just now, we only covered one type of in-text citation: author(year). If you need other formats, here's a reference from [papaja manual](http://frederikaust.com/papaja_man/writing.html#citations):
+
+| **Citation type**           | **Syntax**                 | **Rendered citation**    |
+|-------------------------|------------------------|-----------------------|
+| Citation within parentheses | `[@james_1890]`            | (James, 1890)            |
+| Multiple citations          | `[@james_1890; @bem_2011]` | (Bem, 2011; James, 1890) |
+| In-text citations           | `@james_1890`              | James (1890)             |
+| Year only                   | `[-@bem_2011]`             | (2011)                   |
+
+If you don't have Zotero, you can search the paper by using its DOI. Try this:`10.1093/jn/33.5.491`.
+
+![](images/Screen%20Shot%202022-04-21%20at%2010.50.50%20PM.png)
+
+### Without visual markdown editor
+
+Without visual markdown editor, you can manually create a .bib file to store your bibliography. Let's create a .bib file in R Studio.
+
+1.  Go to File --\> New File --\> Text File.
+2.  Put BibTex information of the literature into this new file. Here I've provided BibTex for two papers. Copy and paste that into the text file.
+
+```{r eval=FALSE}
+@article{isnandar2022effect,
+  title={The effect of an 8\% cocoa bean extract gel on the healing of alveolar osteitis following tooth extraction in Wistar rats},
+  author={Isnandar, I and Hanafiah, Olivia Avriyanti and Lubis, Muhammad Fauzan and Lubis, Lokot Donna and Pratiwi, Adzimatinur and Erlangga, Yeheskiel Satria Yoga},
+  journal={Dental Journal (Majalah Kedokteran Gigi)},
+  volume={55},
+  number={1},
+  pages={7--12},
+  year={2022}
+}
+
+@article{duailibi2004bioengineered,
+  title={Bioengineered teeth from cultured rat tooth bud cells},
+  author={Duailibi, MT and Duailibi, SE and Young, CS and Bartlett, JD and Vacanti, JP and Yelick, PC},
+  journal={Journal of dental research},
+  volume={83},
+  number={7},
+  pages={523--528},
+  year={2004},
+  publisher={SAGE Publications}
+}
+```
+
+3.  Save the file as `manual-reference.bib`.
+
+4.  Update YAML: in the bibliography parameter, add \`manual-reference.bib\` to the list.![](images/Screen%20Shot%202022-04-22%20at%207.56.35%20AM.png)
+
+5.  To cite a paper from the .bib file, type \@ and then the short name of the paper, which is on the first line of BibTex. For the first paper, it's `isnandar2022effect`; the name for the second paper is `duailibi2004bioengineered`.
+
+![](images/Screen%20Shot%202022-04-22%20at%207.56.55%20AM.png){width="206"}
+
+## Report numerical values
+
+When you do calculations in R and want to put the results into the report, don't manually enter the values! Because first, you can make typos. Also, if your data is modified and the calculated values change, you have to go back to the report and update the numbers there. Don't do that!
+
+Instead, if you
+
+Let's start from the easiest. Say you have a single value x:
+
+```{r}
+x <- 5
+```
+
+```{r include=FALSE}
+print_exp <- "`r x`"
+```
+
+You can use `` `r print_exp` `` to print the value of x without actually writing down the number.
+
+You can replace `x` in the expression with any calculations. For example, if x is a vector and you want to report its mean. Copy-paste the following line to create x:
+
+```{r}
+x <- c(1, 4, 6, 7, 10)
+```
+
+```{r include=FALSE}
+print_exp <- "`r mean(x)`"
+```
+
+The expression `` `r print_exp` `` will automatically calculate the mean of x and display the value.
+
+Type this in your markdown: The mean of x is `` `r print_exp` ``.
+
+Another example that could be useful is reporting the regression coefficients. Let's first create an outcome variable. First, run this line of code:
+
+```{r}
+y <- c(5, 8, 6, 10, 15)
+```
+
+Now let's run a regression and obtain the coefficients.
+
+```{r}
+mod <- lm(y ~ x)
+coef_mod <- coefficients(mod) # extract coefficients
+coef_mod
+```
+
+
+```{r include = F}
+print_exp <- "`r coef_mod[1]`"
+print_exp_2 <- "`r coef_mod[2]`"
+```
+
+Now, copy and paste this sentence into the markdown:
+
+The predicted model is \$y = `` `r print_exp` ``+`` `r print_exp_2` `` x\$.
+
+You should get something like this:
+
+$y = `r coef_mod[1]` + `r coef_mod[2]`x$
+
+And if you make changes to the data now, such as:
+
+```{r}
+x <- x + 1 # add 1 to x
+mod <- lm(y ~ x)
+coef_mod <- coefficients(mod)
+coef_mod
+```
+
+The same expression will give you an updated result: $y = `r coef_mod[1]` + `r coef_mod[2]`x$.
+
+This reporting feature is not limited to the `papaja` template! You can use it in any R Markdown files. 
+
+\
+
+# Resources
+
+The tutorial in .rmd can be found here: https://github.com/Shengqi-Iris-Zhong/papaja_tutorial.git
+
+If you want to learn more about writing and formatting papers in R, here are some resources:
+
+papaja manual: <http://frederikaust.com/papaja_man/>
+
+visual markdown editor: <https://rstudio.github.io/visual-markdown-editing/>
